@@ -1,3 +1,3 @@
-!. [http://www.cnblogs.com/1wen/p/5808276.html](http://www.cnblogs.com/1wen/p/5808276.html)
-2. [https://github.com/websockets/ws/blob/master/examples/serverstats/server.js](https://github.com/websockets/ws/blob/master/examples/serverstats/server.js)
-3. [https://github.com/michaelliao/learn-javascript/blob/master/samples/node/web/ws/ws-with-koa/app.js](https://github.com/michaelliao/learn-javascript/blob/master/samples/node/web/ws/ws-with-koa/app.js)
+- 1. [http://www.cnblogs.com/1wen/p/5808276.html](http://www.cnblogs.com/1wen/p/5808276.html)
+- 2. [https://github.com/websockets/ws/blob/master/examples/serverstats/server.js](https://github.com/websockets/ws/blob/master/examples/serverstats/server.js)
+- 3. [https://github.com/michaelliao/learn-javascript/blob/master/samples/node/web/ws/ws-with-koa/app.js](https://github.com/michaelliao/learn-javascript/blob/master/samples/node/web/ws/ws-with-koa/app.js)

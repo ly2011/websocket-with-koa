@@ -1,14 +1,14 @@
 {
-  "name": "socket_client",
-  "version": "1.0.0",
+  "name": "websocket-with-koa",
+  "version": "1.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
     "nodemon": "nodemon src/index.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["socket", "websocket", "koa", "ws"],
+  "author": "ly2011",
   "license": "ISC",
   "devDependencies": {
     "eslint": "^4.7.1",
@@ -28,5 +28,13 @@
     "koa-router": "^7.2.1",
     "koa-static": "^4.0.1",
     "ws": "^3.2.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ly2011/websocket-with-koa.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ly2011/websocket-with-koa/issues"
+  },
+  "homepage": "https://github.com/ly2011/websocket-with-koa#readme"
 }
