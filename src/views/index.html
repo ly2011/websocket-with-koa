@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+  div {
+    display: inline;
+  }
+  </style>
+</head>
+<body>
+<div class="container">
+  <strong>Server Stats</strong>
+  RSS: <div id="rss"></div><br>
+  Heap total: <div id="heapTotal"></div><br>
+  Heap used: <div id="heapUsed"></div><br>
+</div>
+<script>
+var host = window.document.location.host.replace(/:.*/, '')
+var ws = new WebSocket('ws://' + host + ':8003')
+ws.onmessage = function (event) {
+  console.log('来自服务器端的msg: ', event.data)
+}
+ws.onclose = function () {
+  console.log('关闭')
+  // ws.send('客户端断开连接')
+}
+ws.onopen = function () {
+  console.log('连接成功了!')
+  ws.send('客户端连接成功!')
+}
+ws.onerror = function (err) {
+  console.error(err)
+}
+</script>
+</body>
+</html>
