@@ -22,22 +22,84 @@
   Heap used: <div id="heapUsed"></div><br>
 </div>
 <script>
+
+var ws;
+var lockReconnect = false; // 避免重复连接
 var host = window.document.location.host.replace(/:.*/, '')
-var ws = new WebSocket('ws://' + host + ':8003')
-ws.onmessage = function (event) {
-  console.log('来自服务器端的msg: ', event.data)
+var wsUrl = 'ws://' + host + ':8003';
+
+function createWebSocket(url) {
+  try {
+    ws = new WebSocket(url)
+    initEventHandle()
+  } catch (e) {
+    reconnect(url); // 服务重连
+  }
 }
-ws.onclose = function () {
-  console.log('关闭')
-  // ws.send('客户端断开连接')
+
+function initEventHandle() {
+
+  ws.onopen = function () {
+    console.log('连接成功了!')
+    // 心跳检测重置
+    heartCheck.reset().start();
+    ws.send('客户端连接成功!')
+  }
+  ws.onmessage = function (event) {
+    console.log('来自服务器端的msg: ', event.data)
+    // 如果获取到信息，心跳检测重置
+    // 拿到任何信息都说明当前连接是正常的
+    heartCheck.reset().start();
+  }
+  ws.onclose = function () {
+    console.log('关闭')
+    reconnect(wsUrl)
+  }
+  ws.onerror = function (err) {
+    reconnect(wsUrl)
+    console.error(err)
+  }
 }
-ws.onopen = function () {
-  console.log('连接成功了!')
-  ws.send('客户端连接成功!')
+
+function reconnect (url) {
+  if (lockReconnect) {
+    return;
+  }
+  lockReconnect = true;
+  // 没连接上会一直重连，设置延迟避免请求过多
+  setTimeout(function () {
+    createWebSocket(url);
+    lockReconnect = false
+  }, 2000)
 }
-ws.onerror = function (err) {
-  console.error(err)
+
+// 心跳检测
+var heartCheck = {
+  timeout: 60000, // 60秒
+  timeoutObj: null, // 客户端超时
+  serverTimeoutObj: null, // 服务器端超时
+  reset: function () {
+    clearTimeout(this.timeoutObj)
+    clearTimeout(this.serverTimeoutObj)
+    return this
+  },
+  start: function () {
+    var self = this
+    this.timeoutObj = setTimeout(function () {
+      // 这里发送一个心跳，后端收到后，返回一个心跳消息，
+      // onmessage 拿到返回的心跳就说明连接正常
+      ws.send('HeartBeat')
+      self.serverTimeoutObj = setTimeout(function () { // 如果超过一定时间还没重置，说明后端主动断开了
+        // 如果onclose会执行reconnect，我们执行ws.close()就行了.如果直接执行reconnect 会触发onclose导致重连两次
+        ws.onclose()
+      }, self.timeout)
+    }, this.timeout)
+
+    return this;
+  }
 }
+
+createWebSocket(wsUrl)
 </script>
 </body>
 </html>
